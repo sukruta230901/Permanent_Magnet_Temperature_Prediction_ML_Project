@@ -8,7 +8,6 @@
 
 # ## Importing Libraries 
 
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,21 +18,17 @@ warnings.filterwarnings('ignore')
 
 # ## Importing Dataset 
 
-
 df = pd.read_csv("electric_motor_temperature.csv") 
 df.head()
 
 df.shape
 
-
 df.columns
-
 
 df.info()
 
 
 # ## Descriptive Data Analysis 
-
 
 df.describe()
 
@@ -69,15 +64,14 @@ plt.legend()
 
 
 # As profile_id is an id for each measurement session, we can remove it from any furthur analysis and model building.
+
 df.drop('profile_id',axis = 1,inplace=True)
 df_test.drop('profile_id',axis = 1,inplace=True)
-
 
 df.head()
 
 
 # ## Data Visualization 
-
 
 plt.figure(figsize=(20,30))
 plt.subplot(5,2,1)
@@ -99,7 +93,6 @@ plt.show()
 
 # ## Extract the independent (input) and dependent (output) variable 
 
-
 # extracting independent variable
 X = df.iloc[:,:-1].values
 # extracting dependent variable
@@ -110,7 +103,6 @@ print(Y.shape)
 
 # ## Splitting the dataset into the Training and Testing sets 
 
-
 from sklearn.model_selection import train_test_split
 X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size = 0.3, random_state = 100)
 print(X_train.shape,Y_train.shape)
@@ -118,7 +110,6 @@ print(X_test.shape,Y_test.shape)
 
 
 # ## Normalization of Dataset 
-
 
 # bringing all the features into same range to perform valid predictions
 from sklearn.preprocessing import MinMaxScaler
@@ -139,7 +130,6 @@ print(Y_train, Y_test)
 # 4. AdaBoost Regressor
 
 # ## Importing Libraries 
-
 
 import sklearn
 import numpy as np
@@ -260,7 +250,6 @@ print(f'R^2 Score: {r2_k_cv} %')
 
 # ### Evaluation and Visualization
 
-
 calculation = pd.DataFrame(np.c_[Y_test,k_reg.predict(X_test)], columns = ["Original Temperature","Predicted Temperature"])
 calculation.head(5)
 
@@ -277,7 +266,6 @@ plt.show()
 
 
 # ## XGBoost Regressor 
-
 
 x_reg = XGBRegressor()
 x_reg.fit(X_train,Y_train)
@@ -303,7 +291,6 @@ print(f"Mean absolute error is {mae_x}")
 
 # ### Performing KFold Cross-Validation (CV)
 
-
 # prepare the cross-validation procedure
 cv = KFold(n_splits=10, random_state=100, shuffle=True)
 # create model
@@ -321,7 +308,6 @@ print(f'R^2 Score: {r2_x_cv} %')
 
 # ### Evaluation and Visualization 
 
-
 calculation = pd.DataFrame(np.c_[Y_test,x_reg.predict(X_test)], columns = ["Original Temperature","Predicted Temperature"])
 calculation.head(5)
 
@@ -338,7 +324,6 @@ plt.show()
 
 
 # ## AdaBoost Regressor 
-
 
 dtree = DecisionTreeRegressor()
 a_reg = AdaBoostRegressor(n_estimators=100, base_estimator=dtree,learning_rate=1)
@@ -365,7 +350,6 @@ print(f"Mean absolute error is {mae_a}")
 
 # ### Performing KFold Cross-Validation (CV) 
 
-
 # prepare the cross-validation procedure
 cv = KFold(n_splits=10, random_state=100, shuffle=True)
 # create model
@@ -383,7 +367,6 @@ print(f'R^2 Score: {r2_a_cv} %')
 
 # ### Evaluation and Visualization 
 
-
 calculation = pd.DataFrame(np.c_[Y_test,a_reg.predict(X_test)], columns = ["Original Temperature","Predicted Temperature"])
 calculation.head(5)
 
@@ -399,7 +382,6 @@ plt.show()
 
 
 # ## Evaluation Table 
-
 
 models = pd.DataFrame({
     'Algorithm': ['Linear Regression','XGBoost Regressor', 
