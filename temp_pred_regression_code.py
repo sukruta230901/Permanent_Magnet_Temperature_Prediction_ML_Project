@@ -8,8 +8,6 @@
 
 # ## Importing Libraries 
 
-# In[1]:
-
 
 import pandas as pd
 import numpy as np
@@ -21,26 +19,14 @@ warnings.filterwarnings('ignore')
 
 # ## Importing Dataset 
 
-# In[2]:
-
 
 df = pd.read_csv("electric_motor_temperature.csv") 
 df.head()
 
-
-# In[3]:
-
-
 df.shape
 
 
-# In[4]:
-
-
 df.columns
-
-
-# In[5]:
 
 
 df.info()
@@ -48,27 +34,16 @@ df.info()
 
 # ## Descriptive Data Analysis 
 
-# In[6]:
-
 
 df.describe()
-
-
-# In[7]:
 
 
 # There are no missing values in the dataset.
 df.isnull().sum()
 
 
-# In[8]:
-
-
 df_test = df[(df['profile_id'] == 65) | (df['profile_id'] == 72)]
 df = df[(df['profile_id'] != 65) & (df['profile_id'] != 72)]
-
-
-# In[9]:
 
 
 plt.figure(figsize=(15,6))
@@ -76,8 +51,6 @@ df['profile_id'].value_counts().sort_values().plot(kind = 'bar')
 
 
 # As we can see, session ids 66, 6 and 20 have the most number of measurements recorded.
-
-# In[10]:
 
 
 plt.figure(figsize=(20,5))
@@ -93,7 +66,6 @@ plt.legend()
 # 
 # Due to this we can infer that there has not been much time given for the motor to cool down in between recording the sensor data as we can see that initially the stator yoke temperature is low as compared to temperature of stator winding but as we progress in time, the stator yoke temperature goes above the temperature of stator winding.
 
-# In[11]:
 
 
 # As profile_id is an id for each measurement session, we can remove it from any furthur analysis and model building.
@@ -101,15 +73,10 @@ df.drop('profile_id',axis = 1,inplace=True)
 df_test.drop('profile_id',axis = 1,inplace=True)
 
 
-# In[12]:
-
-
 df.head()
 
 
 # ## Data Visualization 
-
-# In[13]:
 
 
 plt.figure(figsize=(20,30))
@@ -132,8 +99,6 @@ plt.show()
 
 # ## Extract the independent (input) and dependent (output) variable 
 
-# In[14]:
-
 
 # extracting independent variable
 X = df.iloc[:,:-1].values
@@ -145,8 +110,6 @@ print(Y.shape)
 
 # ## Splitting the dataset into the Training and Testing sets 
 
-# In[15]:
-
 
 from sklearn.model_selection import train_test_split
 X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size = 0.3, random_state = 100)
@@ -156,8 +119,6 @@ print(X_test.shape,Y_test.shape)
 
 # ## Normalization of Dataset 
 
-# In[16]:
-
 
 # bringing all the features into same range to perform valid predictions
 from sklearn.preprocessing import MinMaxScaler
@@ -165,10 +126,6 @@ mm = MinMaxScaler() # 0 : 1
 X_train =mm.fit_transform(X_train)
 X_test = mm.fit_transform(X_test)
 print(X_train, X_test)
-
-
-# In[17]:
-
 
 print(Y_train, Y_test)
 
@@ -182,8 +139,6 @@ print(Y_train, Y_test)
 # 4. AdaBoost Regressor
 
 # ## Importing Libraries 
-
-# In[18]:
 
 
 import sklearn
@@ -204,9 +159,6 @@ from sklearn.model_selection import cross_val_score, KFold
 
 # ## Linear Regression Model
 
-# In[19]:
-
-
 l_reg = LinearRegression()
 l_reg.fit(X_train,Y_train)
 
@@ -217,15 +169,8 @@ print(f"Train accuracy: {l_train_acc}")
 # printf("Train accuracy is %f", l_train_acc)
 print(f"Test accuracy: {l_test_acc}")
 
-
-# In[20]:
-
-
 Y_pred = l_reg.predict(X_test)
 print(Y_test.shape, Y_pred.shape)
-
-
-# In[21]:
 
 
 r2_l = r2_score(Y_test, Y_pred)*100
@@ -236,10 +181,7 @@ print(f"Root mean squared error is {rms_l}")
 print(f"Mean absolute error is {mae_l}")
 
 
-# ### Performing KFold Cross-Validation (CV) 
-
-# In[22]:
-
+# ### Performing KFold Cross-Validation (CV)
 
 # prepare the cross-validation procedure
 cv = KFold(n_splits=10, random_state=100, shuffle=True)
@@ -258,17 +200,11 @@ print(f'R^2 Score: {r2_l_cv} %')
 
 # ### Evaluation Table 
 
-# In[23]:
-
-
 calculation = pd.DataFrame(np.c_[Y_test,l_reg.predict(X_test)], columns = ["Original Temperature","Predicted Temperature"])
 calculation.head(5)
 
 
 # ### Visualizing the test results 
-
-# In[24]:
-
 
 plt.style.use('ggplot') 
 plt.figure(figsize=(19,9))
@@ -283,9 +219,6 @@ plt.show()
 
 # ## K-Nearest Neighbour Regressor 
 
-# In[26]:
-
-
 k_reg = KNeighborsRegressor(n_neighbors=10,p=2,metric='minkowski')
 k_reg.fit(X_train,Y_train)
 
@@ -296,14 +229,8 @@ print(f"Train accuracy: {k_train_acc}")
 print(f"Test accuracy: {k_test_acc}")
 
 
-# In[27]:
-
-
 Y_pred = k_reg.predict(X_test)
 print(Y_test.shape, Y_pred.shape)
-
-
-# In[28]:
 
 
 r2_k = r2_score(Y_test, Y_pred)*100
@@ -315,9 +242,6 @@ print(f"Mean absolute error is {mae_k}")
 
 
 # ### Performing KFold Cross-Validation (CV) 
-
-# In[29]:
-
 
 # prepare the cross-validation procedure
 cv = KFold(n_splits=10, random_state=100, shuffle=True)
@@ -336,14 +260,9 @@ print(f'R^2 Score: {r2_k_cv} %')
 
 # ### Evaluation and Visualization
 
-# In[30]:
-
 
 calculation = pd.DataFrame(np.c_[Y_test,k_reg.predict(X_test)], columns = ["Original Temperature","Predicted Temperature"])
 calculation.head(5)
-
-
-# In[31]:
 
 
 plt.style.use('ggplot') 
@@ -359,8 +278,6 @@ plt.show()
 
 # ## XGBoost Regressor 
 
-# In[32]:
-
 
 x_reg = XGBRegressor()
 x_reg.fit(X_train,Y_train)
@@ -372,14 +289,8 @@ print(f"Train accuracy: {x_train_acc}")
 print(f"Test accuracy: {x_test_acc}")
 
 
-# In[33]:
-
-
 Y_pred = x_reg.predict(X_test)
 print(Y_test.shape, Y_pred.shape)
-
-
-# In[34]:
 
 
 r2_x = r2_score(Y_test, Y_pred)*100
@@ -391,8 +302,6 @@ print(f"Mean absolute error is {mae_x}")
 
 
 # ### Performing KFold Cross-Validation (CV)
-
-# In[35]:
 
 
 # prepare the cross-validation procedure
@@ -412,14 +321,9 @@ print(f'R^2 Score: {r2_x_cv} %')
 
 # ### Evaluation and Visualization 
 
-# In[36]:
-
 
 calculation = pd.DataFrame(np.c_[Y_test,x_reg.predict(X_test)], columns = ["Original Temperature","Predicted Temperature"])
 calculation.head(5)
-
-
-# In[37]:
 
 
 plt.style.use('ggplot') 
@@ -435,8 +339,6 @@ plt.show()
 
 # ## AdaBoost Regressor 
 
-# In[38]:
-
 
 dtree = DecisionTreeRegressor()
 a_reg = AdaBoostRegressor(n_estimators=100, base_estimator=dtree,learning_rate=1)
@@ -449,14 +351,8 @@ print(f"Train accuracy: {a_train_acc}")
 print(f"Test accuracy: {a_test_acc}")
 
 
-# In[39]:
-
-
 Y_pred = a_reg.predict(X_test)
 print(Y_test.shape, Y_pred.shape)
-
-
-# In[40]:
 
 
 r2_a = r2_score(Y_test, Y_pred)*100
@@ -468,8 +364,6 @@ print(f"Mean absolute error is {mae_a}")
 
 
 # ### Performing KFold Cross-Validation (CV) 
-
-# In[43]:
 
 
 # prepare the cross-validation procedure
@@ -489,15 +383,9 @@ print(f'R^2 Score: {r2_a_cv} %')
 
 # ### Evaluation and Visualization 
 
-# In[44]:
-
 
 calculation = pd.DataFrame(np.c_[Y_test,a_reg.predict(X_test)], columns = ["Original Temperature","Predicted Temperature"])
 calculation.head(5)
-
-
-# In[45]:
-
 
 plt.style.use('ggplot') 
 plt.figure(figsize=(19,9))
@@ -511,8 +399,6 @@ plt.show()
 
 
 # ## Evaluation Table 
-
-# In[53]:
 
 
 models = pd.DataFrame({
@@ -534,9 +420,6 @@ models.sort_values(by = ['Training Accuracy', 'Testing Auracy', 'RMS Score', 'MA
 
 # ### Algorithm vs. R^2 Score  
 
-# In[54]:
-
-
 plt.style.use('ggplot') 
 plt.figure(figsize=(12,8))
 sns.barplot(x='Algorithm',y='R^2 Score',data=models)
@@ -545,9 +428,6 @@ plt.show()
 
 
 # ### Algorithm vs. CV R^2 Score  
-
-# In[55]:
-
 
 plt.style.use('ggplot') 
 plt.figure(figsize=(12,8))
@@ -558,9 +438,6 @@ plt.show()
 
 # ### Algorithm vs. Training Accuracy
 
-# In[56]:
-
-
 plt.style.use('ggplot') 
 plt.figure(figsize=(12,8))
 sns.barplot(x='Algorithm',y='Training Accuracy',data=models)
@@ -570,12 +447,8 @@ plt.show()
 
 # ### Algorithm vs. Testing Accuracy 
 
-# In[57]:
-
-
 plt.style.use('ggplot') 
 plt.figure(figsize=(12,8))
 sns.barplot(x='Algorithm',y='Testing Auracy',data=models)
 plt.title("Model Prediction w.r.t. Testing accuracy")
 plt.show()
-
