@@ -1,4 +1,4 @@
-# Electric_Motor_Temperature_Prediction_Machine-Learning_Project
+# Permenant_Magnet_Temperature_Prediction_Machine-Learning_Project
 
 This repository contains:-
 
