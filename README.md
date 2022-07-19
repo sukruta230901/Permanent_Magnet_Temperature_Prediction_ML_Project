@@ -22,4 +22,4 @@ The Dataset file is about electric motor temperature data in which there are 13 
 
 In this section there's a detailed code of performing a Machine Learning project at undergraduate level. Here I've performed Exploratory Data Analysis, Data Preprocessing and Visualization. Then after Data cleaning and formatting, I've applied Regression algorithms to train the model and predict the temperature ('pm') of the electric motor. Regression models like - Linear Regression, K-Nearest Neighbor Regressor, XGBoost Regressor and AdaBoost Regressor were used in this project. Also after visualizing the result and the evaluation table I've also performed cross-validation to validate each of my regression models and have plotted the comparison plots to conclude the best model for the motor temperature prediction. 
 
-
+◾ Find my complete code on kaggle:- https://www.kaggle.com/code/sukrutapardeshi/electric-motor-temperature-prediction-regression
